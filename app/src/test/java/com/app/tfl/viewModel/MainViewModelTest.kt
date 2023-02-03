@@ -2,10 +2,13 @@ package com.app.tfl.viewModel
 
 import com.app.tfl.RepositoryImpl
 import com.app.tfl.api.LineStatusResponse
+import com.app.tfl.api.LineStatuses
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.setMain
@@ -18,6 +21,7 @@ class MainViewModelTest {
     lateinit var viewModel: MainViewModel
     lateinit var repository: RepositoryImpl
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -26,9 +30,15 @@ class MainViewModelTest {
     }
 
     @Test
+    fun `Verify that API call was made`() {
+        viewModel.getAll()
+        coVerify { repository.getAll() }
+    }
+
+    @Test
     fun `get data`() {
         runBlocking {
-            coEvery { repository.getAll() } returns (Response.success(lineStatuses))
+            coEvery { repository.getAll() } returns (Response.success(_listLine))
 
             viewModel.getAll()
 
@@ -39,15 +49,25 @@ class MainViewModelTest {
     @Test
     fun `get Line data`() {
         runBlocking {
-            coEvery { repository.getAll() } returns (Response.success(lineStatuses))
+            coEvery { repository.getAll() } returns (Response.success(_listLine))
 
             viewModel.getAll()
 
-            assertThat((viewModel.APIState.value as APITask.Response.Ok).payload[0].name).isEqualTo(lineStatuses)
+            assertThat((viewModel.APIState.value as APITask.Response.Ok).payload[0].name).isEqualTo(_line.name)
         }
     }
-
 }
 
-val lineStatuses = listOf<LineStatusResponse>()
+val _lineStatuses = LineStatuses(
+    statusSeverityDescription = "Service Low",
+    reason = "Line being Fixed"
+)
 
+val _line = LineStatusResponse(
+    name = "Circle",
+    lineStatuses = listOf(_lineStatuses),
+)
+
+val _listLine = listOf(
+    _line,
+)

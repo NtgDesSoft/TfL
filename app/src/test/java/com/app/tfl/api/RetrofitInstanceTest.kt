@@ -1,6 +1,6 @@
-package com.app.tfl.api
+package com.app.marvel.api
 
-//import org.mockito.MockitoAnnotations
+import com.app.tfl.api.StatusEndPoints
 import com.google.gson.Gson
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
@@ -9,6 +9,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.MockitoAnnotations
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,7 +21,7 @@ class RetrofitInstanceTest {
 
     @Before
     fun setup() {
-        //MockitoAnnotations.initMocks(this)
+        MockitoAnnotations.initMocks(this)
         gson = Gson()
         mockWebServer = MockWebServer()
         apiService = Retrofit.Builder()

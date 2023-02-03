@@ -5,7 +5,6 @@ import androidx.compose.ui.graphics.Color
 data class LineStatusResponse(
     val name: String,
     val lineStatuses: List<LineStatuses>,
-    val routeSections: List<String>
 )
 
 data class LineStatuses(
