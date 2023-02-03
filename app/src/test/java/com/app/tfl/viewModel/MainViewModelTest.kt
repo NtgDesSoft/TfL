@@ -1,5 +1,6 @@
 package com.app.tfl.viewModel
 
+import androidx.compose.ui.graphics.Color
 import com.app.tfl.RepositoryImpl
 import com.app.tfl.api.LineStatusResponse
 import com.app.tfl.api.LineStatuses
@@ -54,6 +55,17 @@ class MainViewModelTest {
             viewModel.getAll()
 
             assertThat((viewModel.APIState.value as APITask.Response.Ok).payload[0].name).isEqualTo(_line.name)
+        }
+    }
+
+    @Test
+    fun `Validate Line Colour`() {
+        runBlocking {
+            coEvery { repository.getAll() } returns (Response.success(_listLine))
+
+            viewModel.getAll()
+
+            assertThat((viewModel.APIState.value as APITask.Response.Ok).payload[0].colour).isEqualTo(Color(0xFFFFCE00))
         }
     }
 }
