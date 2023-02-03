@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.tfl.Repository
+import com.app.tfl.api.LineColorMap
 import com.app.tfl.data.LineStatus
 import com.app.tfl.data.Statuses
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,7 @@ class MainViewModel @Inject constructor(
                                     Severity = LineStatusResponse[it].lineStatuses[0].statusSeverityDescription,
                                     reason = LineStatusResponse[it].lineStatuses[0].reason
                                 ),
-                                colour = Color.Unspecified
+                                colour = LineColorMap[LineStatusResponse[it].name.lowercase()]?:Color.Unspecified
                             )
                         }
                     } ?: emptyList()
